@@ -35,15 +35,17 @@ class Record:
         self.phones = [p for p in self.phones if p.value != phone]
 
     def edit_phone(self, old_phone, new_phone):
-        for phone in self.phones:
-            if phone.value == old_phone:
-                phone.value = new_phone
-                break
-
+        old_phone_obj = self.find_phone(old_phone)
+        if old_phone_obj is None:
+            raise ValueError("Old phone number not found")
+        if not Phone.validate_phone(new_phone):
+            raise ValueError("Invalid new phone number format")
+        old_phone_obj.value = new_phone
+        
     def find_phone(self, phone):
         for p in self.phones:
             if p.value == phone:
-                return p.value
+                return p
         return None
 
     def __str__(self):
